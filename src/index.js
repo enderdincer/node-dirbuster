@@ -10,7 +10,7 @@ var exportStreams = require("./lib/export-streams");
 
 module.exports = buster;
 
-function buster(options, onComplete) {
+function buster(options) {
   var pathStream = createPathStream();
 
   // / attach simple path stream
@@ -24,11 +24,8 @@ function buster(options, onComplete) {
   var listStream = generators.createListStream(options.list);
   listStream.pipe(pathStream, { end: false });
   listStream.on("end", function () {
-    onComplete();
     state.main = true;
-    if (!state.checkDir) {
-      pathStream.end();
-    }
+    pathStream.end();
   });
 
   listStream.resume();
